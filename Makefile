@@ -3,17 +3,21 @@ WD := $(shell pwd)
 PY := bin/python
 PIP := bin/pip
 PEP8 := bin/pep8
-NOSE := bin/nosetests
+PYTEST := bin/pytest
 
 # ###########
 # Tests rule!
 # ###########
 .PHONY: test
-test: venv develop $(NOSE)
-	$(NOSE) -s tests
+test: venv develop $(PYTEST)
+	$(PYTEST) -q -s tests
 
-$(NOSE):
-	$(PIP) install nose nose-selecttests pep8 pylint coverage
+.PHONY: test-coverage
+test-coverage: venv develop $(PYTEST)
+	$(PYTEST) --cov -q breadability tests
+
+$(PYTEST):
+	$(PIP) install -r requirements.txt
 
 # #######
 # INSTALL
